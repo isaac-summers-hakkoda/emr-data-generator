@@ -92,3 +92,5 @@ ENV/
 .idea
 *.stackdump
 *.code-workspace
+Pipfile*
+demodata/*

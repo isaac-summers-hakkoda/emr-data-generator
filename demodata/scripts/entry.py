@@ -17,25 +17,27 @@ def cli(ctx, output):
 @click.command()
 @click.pass_context
 @click.option('--count', default=1, help='number of patients')
-def patients(ctx, count):
+@click.option('--sql_out', default=True, help='sql or regular output')
+def patients(ctx, count, sql_out):
     """Generate patient data"""
     patient = p.generate_patients(count)
     sql = u.generate_sql('patient_data', patient)
 
     # @todo Figure out a way to handle the --output option, probably a function called post_process()
-    click.echo(sql)
+    click.echo(sql) if sql_out == True else click.echo(patient)
 
 
 @click.command()
 @click.pass_context
 @click.option('--count', default=1, help='number of facilities')
-def facilities(ctx, count):
+@click.option('--sql_out', default=True, help='sql or regular output')
+def facilities(ctx, count, sql_out):
     """Generate faciliity data"""
     facility = f.generate_facility(count)
-    sql = u.generate_sql('facilities', facility)
+    sql = u.generate_sql('facility', facility)
 
     # @todo Figure out a way to handle the --output option, probably a function called post_process()
-    click.echo(sql)
+    click.echo(sql) if sql_out == True else click.echo(facility)
 
 
 cli.add_command(patients)
