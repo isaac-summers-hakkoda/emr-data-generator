@@ -41,11 +41,11 @@ def facilities(ctx, count, sql_out):
 
 @click.command()
 @click.pass_context
-@click.option('--count', default=10000, help='number of patients to generate')
 @click.option('--filename', default='./dataexport/patient_data.csv', help='filename for output')
-def patientsfileout(ctx, count, filename):
+@click.option('--count', default=10000, help='number of patients to generate')
+def patientsfileout(ctx, filename, count):
     """Generate patient data and output to file"""
-    p.generate_patients_txt(count, filename)
+    p.generate_patients_txt(filename, count)
 
 
 cli.add_command(patients)
