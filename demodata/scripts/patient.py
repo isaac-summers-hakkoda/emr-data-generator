@@ -1,7 +1,10 @@
+# %%
 """Generate patient data"""
 
 import barnum
 from demodata.util import *
+from faker import Faker
+
 
 __copyright__ = "Copyright (C) 2017 Robert Down"
 __author__ = "Robert Down <robertdown@live.com>"
@@ -9,9 +12,11 @@ __license__ = "GNU GPL3"
 
 
 def generate_patients(count=1):
+    fake = Faker()
+    Faker.seed()
     random.seed()
     patients = []
-    for x in range(0, count):
+    for _ in range(count):
         sex = 'Male' if random.randint(0, 1) % 2 else 'Female'
         fname, lname = barnum.create_name(gender=sex)
         mname = barnum.create_name(False, sex) if random_truth(0.27) == 1 else ''
@@ -31,7 +36,7 @@ def generate_patients(count=1):
             'city': city,
             'state': state,
             'country_code': 'US',
-            'drivers_license': random_drivers_license(lname[0], int(dob.strftime("%y"))),
+            'drivers_license': fake.pystr(),
             'ss': random.randint(100000000, 999999999),
             'occupation': barnum.create_job_title(),
             'phone_home': barnum.create_phone(postal_code),
@@ -97,18 +102,14 @@ def generate_title(gender=None):
     random.seed()
     if gender is None:
         return ''
-    if gender == 'Male':
-        titles = {'': 47, 'Mr.': 49, 'Dr.': 3}
     if gender == 'Female':
         titles = {'': 47, 'Mrs.': 30, 'Ms.': 23}
-
+    elif gender == 'Male':
+        titles = {'': 47, 'Mr.': 49, 'Dr.': 3}
     weighted_titles = []
-
     for t, w in titles.items():
         weighted_titles.extend(repeat(t, w))
-
     r = random.randint(0, 99)
-
     return weighted_titles[r - 1 if r > 0 else 0]
 
 
@@ -119,3 +120,22 @@ def generate_pharmacy():
     phone = barnum.create_phone(zip)
     fax = barnum.create_phone(zip)
     return name, street, city, state, zip, email, phone, fax
+
+
+# %%
+def generate_patients_txt(filepath='patients.txt'):
+    with open(filepath, 'w') as f:
+        header = True
+        for _ in range(1000):
+            patients = generate_patients(100)
+            if header:
+                f.write(", ".join(repr(k) for k, v in patients[0].items()) + "\n")
+                header = False
+            for i in patients:
+                f.write(", ".join(repr(v) for k, v in i.items()) + "\n")
+    return
+
+
+# %%
+generate_patients_txt()
+# %%

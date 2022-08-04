@@ -93,4 +93,6 @@ ENV/
 *.stackdump
 *.code-workspace
 Pipfile*
-demodata/*
+dataexport/*
+*vscode*
+*DS_Store*
