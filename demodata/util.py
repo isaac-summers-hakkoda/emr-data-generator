@@ -55,5 +55,5 @@ def generate_sql(table_name, object):
 
 def generate_address():
     street = barnum.create_street()
-    zip, city, state = barnum.create_city_state_zip()
-    return street, city, state, zip
+    zipcode, city, state = barnum.create_city_state_zip()
+    return street, city, state, zipcode

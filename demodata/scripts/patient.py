@@ -4,6 +4,7 @@
 import barnum
 from demodata.util import *
 from faker import Faker
+import csv
 
 
 __copyright__ = "Copyright (C) 2017 Robert Down"
@@ -11,7 +12,7 @@ __author__ = "Robert Down <robertdown@live.com>"
 __license__ = "GNU GPL3"
 
 
-def generate_patients(count=1):
+def generate_patients(count=1, type=None):
     fake = Faker()
     Faker.seed()
     random.seed()
@@ -75,7 +76,8 @@ def generate_patients(count=1):
             'hipaa_allowemail': 'yes' if random_truth(0.70) == 1 else 'no',
         }
         patients.append(patient)
-
+        # patient_keys = patients[0].keys()
+        # patient_values = [list(i.vaules()) for i in patients]
     return patients
 
 
@@ -121,21 +123,17 @@ def generate_pharmacy():
     fax = barnum.create_phone(zip)
     return name, street, city, state, zip, email, phone, fax
 
-
 # %%
-def generate_patients_txt(filepath='patients.txt'):
+def generate_patients_txt(filepath, count=1):
+    header = list(generate_patients(1)[0].keys())
+    patients = [list(i.values()) for i in generate_patients(count)]
+    # print(header)
+    # print(patients)
     with open(filepath, 'w') as f:
-        header = True
-        for _ in range(1000):
-            patients = generate_patients(100)
-            if header:
-                f.write(", ".join(repr(k) for k, v in patients[0].items()) + "\n")
-                header = False
-            for i in patients:
-                f.write(", ".join(repr(v) for k, v in i.items()) + "\n")
+        cw = csv.writer(f, delimiter=',')
+        cw.writerow(header)
+        cw.writerows(patients)
     return
+generate_patients_txt(200)
 
-
-# %%
-generate_patients_txt()
 # %%

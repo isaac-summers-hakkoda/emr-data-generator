@@ -39,6 +39,15 @@ def facilities(ctx, count, sql_out):
     # @todo Figure out a way to handle the --output option, probably a function called post_process()
     click.echo(sql) if sql_out == True else click.echo(facility)
 
+@click.command()
+@click.pass_context
+@click.option('--count', default=10000, help='number of patients to generate')
+@click.option('--filename', default='./dataexport/patient_data.csv', help='filename for output')
+def patientsfileout(ctx, count, filename):
+    """Generate patient data and output to file"""
+    p.generate_patients_txt(count, filename)
+
 
 cli.add_command(patients)
 cli.add_command(facilities)
+cli.add_command(patientsfileout)
