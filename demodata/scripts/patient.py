@@ -67,7 +67,7 @@ def generate_patients(count=1):
             'homeless': '',
             'financial_review': barnum.create_date(past=True).strftime("%Y-%m-%d"),
             'pubpid': '',
-            'pid': str(uuid.uuid4()),
+            'pid': str(random.randint(1, 9999999999)),
             'hipaa_mail': 'yes' if random_truth(0.90) == 1 else 'no',
             'hipaa_voice': 'yes' if random_truth(0.75) == 1 else 'no',
             'hipaa_notice': 'yes' if random_truth(0.93) == 1 else 'no',
@@ -124,13 +124,13 @@ def generate_pharmacy():
     return name, street, city, state, zip, email, phone, fax
 
 # %%
-def generate_patients_txt(filename='patients.csv', count=1):
+def generate_patients_txt(filename='./patient_data.csv', count=1):
     header = list(generate_patients(count=1)[0].keys())
     patients = [list(i.values()) for i in generate_patients(count)]
     # print(header)
     # print(patients)
-    with open(filename, 'w') as f:
-        cw = csv.writer(f, delimiter=',')
+    with open(file=filename, mode='w') as f:
+        cw = csv.writer(f, delimiter=',', lineterminator='\r\n', quoting=csv.QUOTE_ALL)
         cw.writerow(header)
         cw.writerows(patients)
     return

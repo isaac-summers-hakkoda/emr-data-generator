@@ -1,7 +1,9 @@
+# %%
 """Generate facility data"""
 
 import barnum
 from demodata.util import *
+import csv
 
 __copyright__ = "Copyright (C) 2017 Robert Down"
 __author__ = "Robert Down <robertdown@live.com>"
@@ -42,9 +44,20 @@ def generate_facility(count=1):
             'pos_code': '21',
             'attn': '',
             'domain_identifier': '',
-            'facility_id': '%s-%s' % (name, str(random.randint(10000, 99999)))
+            'weno_id': '%s-%s' % (name, str(random.randint(10000, 99999)))
         }
 
         facilities.append(facility)
 
     return facilities
+
+def generate_facility_txt(filename='../../dataexport/facilities.csv', count=1):
+    header = list(generate_facility(count=1)[0].keys())
+    facilities = [list(i.values()) for i in generate_facility(count)]
+
+    with open(file=filename, mode='w') as f:
+        cw = csv.writer(f, delimiter=',', lineterminator='\r\n', quoting=csv.QUOTE_ALL)
+        cw.writerow(header)
+        cw.writerows(facilities)
+    return
+# %%
